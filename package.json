@@ -1,0 +1,27 @@
+{
+  "name": "orange-plus",
+  "version": "1.0.0",
+  "description": "爆料-橙plus柠正确的打开方式",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freestyle21/orange-plus.git"
+  },
+  "keywords": [
+    "爆料-橙plus柠正确的打开方式"
+  ],
+  "author": "qubaoming",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/freestyle21/orange-plus/issues"
+  },
+  "homepage": "https://github.com/freestyle21/orange-plus#readme",
+  "dependencies": {
+    "finalhandler": "^0.4.1",
+    "serve-static": "^1.10.2"
+  }
+}
