@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">   
     <title>爆料-橙plus柠正确的打开方式</title> 
-    <link rel="stylesheet" href="./css/global.css">
-    <link rel="stylesheet" href="./css/zepto.fullpage.css">
-    <link rel="stylesheet" href="./js/lib/frozenUI/css/frozen.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/zepto.fullpage.css">
+    <link rel="stylesheet" href="/js/lib/frozenUI/css/frozen.css">
 </head>
 <body>
     <div class="wp">
         <div class="wp-inner">
-            <!-- <div class="page page1">
+            <div class="page page1">
                 <div class="page1-title">
                     <div class="page1-item page1-subtitle">
                         爆料!!
@@ -31,17 +31,18 @@
                 </div>
                 <div class="page1-control">
                     <div class="page1-button">
-                        <img src="./img/arrow.png" alt="">开始爆料之旅
+                        <img src="/img/arrow.png" alt="">开始爆料之旅
                     </div>
                             
                 </div>
-            </div> -->
-            <!-- <div class="page page2">
+            </div>
+
+            <div class="page page2">
                 <div class="page2-content">
                     <div class="page2-img-des">
-                        <img src="./img/orange1.jpeg" alt="">
-                        <img src="./img/add.png" alt="">
-                        <img src="./img/orange2.jpeg" alt="">
+                        <img src="/img/orange1.jpeg" alt="">
+                        <img src="/img/add.png" alt="">
+                        <img src="/img/orange2.jpeg" alt="">
                     </div>
                     <div class="page2-text-des">
                         <div class="page2-text-item">
@@ -113,18 +114,18 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
-    
+            </div>
 
-            <!-- <div class="page page3">
+            <div class="page page3">
                 <div class="page3-content">
-                    <img src="./img/production.jpg" alt="">
+                    <img src="/img/production.jpg" alt="">
                 </div>
                 <div class="page3-people">
-                    <img src="./img/people.png" alt="">
+                    <img src="/img/people.png" alt="">
                 </div>
-            </div> -->
-            <!-- <div class="page page4">
+            </div>
+
+            <div class="page page4">
                 <div class="page4-title">
                     互动答题，抽微信红包！
                 </div>
@@ -209,9 +210,9 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
-            <!-- <div class="page page5">
+            <div class="page page5">
                 <div class="page5-question">
                     <div class="page5-question-item page5-q1">
                         <div class="page5-question-title">
@@ -321,7 +322,8 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
+            
             <div class="page page6">
                 <div class="page6-title">
                     开始抽奖
@@ -336,219 +338,19 @@
         </div>
     </div>
     <span class="start"><b></b></span>
-    <script src="./js/lib/zepto.min.js"></script>
-    <script src="./js/lib/frozenUI/js/frozen.js"></script>
-    <script src="./js/lib/fullpage/zepto.fullpage.js"></script>
+    <script src="/js/lib/zepto.min.js"></script>
+    <script src="/js/lib/sea.js"></script>
+    <script src="/js/lib/frozenUI/js/frozen.js"></script>
+    <script src="/js/lib/fullpage/zepto.fullpage.js"></script>
     <script>
-        $('.wp-inner').fullpage();
-
-        window.requestAnimFrame = (function() {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-                function(callback) {
-                    window.setTimeout(callback, 1000 / 60)
-                }
-    })();
-    
-    var totalDeg = 360 * 3 + 0;
-    var steps = [];
-
-    var lostDeg = [360];
-    var prizeDeg = [45, 90, 135, 180, 225, 270, 315];
-    var prize, sncode;
-    var count = 0;
-    var now = 0;
-    var a = 0.01;
-    var outter, inner, timer, running = false;
-    
-    function countSteps() {
-        var t = Math.sqrt(2 * totalDeg / a);
-        var v = a * t;
-        for ( var i = 0; i < t; i++ ) {
-            steps.push( (2 * v * i - a * i * i) / 2 )
-        }
-        steps.push( totalDeg )
-    }
-    
-    function step() {
-        outter.style.webkitTransform = "rotate(" + steps[now++] + "deg)";
-        outter.style.MozTransform = "rotate(" + steps[now++] + "deg)";
-        outter.style.transform = "rotate(" + steps[now++] + "deg)";
-        if ( now < steps.length ) {
-            running = true;
-            requestAnimFrame( step );
-        } else {
-            running = false;
-        }
-        
-        if( now == 660 && steps.length == 659 ) {
-            //alert( "别灰心，明天再来！" );
-            $( ".mark, .pop-4" ).show();
-        }
-        if( (now == 609 && steps.length == 609 ) || (now == 645 && steps.length == 645) ) {
-            $( ".mark, .pop-2" ).show();
-        }
-
-        console.log( now, steps.length );
-    }
-    
-    var times = 0;
-    function start( deg, index ) {
-        deg = deg || lostDeg[parseInt(lostDeg.length * Math.random())];
-        running = true;
-        clearInterval( timer );
-        totalDeg = 360 * 5 + deg;
-        steps = [];
-        now = 0;
-        countSteps();
-        requestAnimFrame( step );
-
-    }
-    
-    
-    window.start = start;
-    outter = document.getElementById( "outer" );
-    inner = document.getElementById( "inner" );
-    i = 10;
-    
-    $( "#inner" ).click(function() {
-
-        if ( running )
-            return;
-            
-        // $( "#loading" ).show();
-        
-        // $.getJSON( "http://huodong.37.com/?c=kangshifu20140910&a=get_lottery", function( res ) {
-            // $( "#loading" ).hide();
-            
-            // if( res.result === -1 ) {
-                //window.location.href = "http://www.37.com/wap/my/login.html?url=http%3A%2F%2Fhuodong.37.com%2Fzt%2Fdts%2F20140915%2Findex.html&refer=hd_237_ksfwx";
-                // $( ".mark, .pop-5" ).show();
-            // } else {
-                // if( res.result === 1 ) {
-                //  getNum();
-                //  if ( res.list.index == 0 ) {
-                        start( "", 0 );
-                    // } else {
-                        // start( prizeDeg[res.list.index - 1], res.list.index );
-                //  }
-                // } else if( res.result === -12 ) {
-                //  $( ".mark, .pop-3" ).show();
-                // } else {
-                //  alert( res.msg );
-                // }
-                
-            // }
-            
-        // });  
-
-    });
-    
-    //提交资料
-    function tosubmit() {
-        var realname = $( ".realname" ).val(),
-            phone = $( ".phone" ).val(),
-            address = $( ".address" ).val(),
-            qq = $( ".qq" ).val();
-            
-        if( !realname.length ) {
-            return alert( "姓名不能为空" );
-        }
-        if( !checkPhone( phone ) ) {
-            return alert( "请输入正确的手机号码" );
-        }
-        if( !address.length ) {
-            return alert( "地址不能为空" );
-        }
-        if( !/^\d{5,12}$/.test( qq ) ) {
-            return alert( "请输入正确的QQ号码" );
-        }
-        
-        var data = {
-            real_name: realname,
-            phone: phone,
-            address: address,
-            qq: qq
-        }
-        $.getJSON( "http://huodong.37.com/?c=kangshifu20140910&a=real_info", data, function( res ) {
-            if ( res.result === 1 ) {
-                //alert( res.msg );
-                $( ".pop-2" ).hide();
-                $( ".pop-1" ).show();
-            } else {
-                alert( res.msg );
+        seajs.config({
+            base: "/js/lib/",
+            alias: {
+                "zepto": "zepto.min.js",
+                'querystring': '/node_modules/querystring/index'
             }
-        })
-    }
-    
-    function checkPhone( ob ) {
-        if( ob.match(/^13\d{9}$|^14\d{9}$|^15\d{9}$|^18\d{9}$|^16\d{9}$/) ) {
-            return true;
-        } else {
-          return false;
-        }
-    }
-    
-    //显示抽奖次数
-    // function getNum() {
-    //  $.getJSON( "http://huodong.37.com/?c=kangshifu20140910&a=get_lottery_num", function( res ) {
-    //      if ( res.result === 1 ) {
-    //          $( "#num" ).text( res.val );
-    //      } 
-    //  })
-    // }
-    // getNum();
-    
-    var $close = $( ".close" ),
-        $close2 = $( ".close-2" ),
-        $submitInfo = $( ".submit-info" ),
-        $mark = $( ".mark" ),
-        $pop = $( ".pop" );
-        
-    $close.on( "click", function() { 
-        $mark.hide();
-        $pop.hide();
-    });
-    
-    $close2.on( "click", function() { 
-        var con = confirm( "您是否确认已经完整填写获奖信息并关闭此页面？" ); 
-        if( con ) { 
-            $mark.hide();
-            $pop.hide();
-        } else { 
-            return false; 
-        }
-    });
-    
-    $submitInfo.on( "click", function() { 
-        tosubmit();
-    });
-    
-    // 微信分享
-    try {
-        function weixin() {
-            var data = {
-                "imgUrl": "http://huodong.37.com/zt/dts/20140915/css/images/y.png",
-                "link": window.location.href,
-                "desc": "健康游戏，快乐生活！37《大天使之剑》邀你参与彩色跑，更有海量奖品派发...",
-                "title": "参加大天使彩跑 赢IPhone6"
-            };
-            WeixinApi.shareToTimeline( data, {
-                ready: function() {
-                    data.desc = "健康游戏，快乐生活！37《大天使之剑》邀你参与彩色跑，更有海量奖品派发...";
-                }
-            });
-            WeixinApi.shareToFriend( data, {
-                ready: function() {
-                    data.desc = "健康游戏，快乐生活！37《大天使之剑》邀你参与彩色跑，更有海量奖品派发...";
-                }
-            });
-        }
-        WeixinApi.ready(function( Api ) {
-            setTimeout(function() {
-                weixin( Api );
-            }, 500 );
         });
-    } catch( ex ) {}
+        seajs.use("/js/main");
     </script>
 </body>
 </html>

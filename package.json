@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "sudo node-dev ./server/bin/www.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,21 @@
   },
   "homepage": "https://github.com/freestyle21/orange-plus#readme",
   "dependencies": {
+    "co-body": "^4.0.0",
     "finalhandler": "^0.4.1",
+    "koa": "^1.2.0",
+    "koa-request": "^1.0.0",
+    "koa-router": "3.2.3",
+    "koa-static": "^2.0.0",
+    "koa-views": "^4.1.0",
     "serve-static": "^1.10.2"
+  },
+  "devDependencies": {
+    "ejs": "^2.4.1",
+    "md5": "^2.1.0",
+    "moment": "^2.12.0",
+    "querystring": "^0.2.0",
+    "randomstring": "^1.1.4",
+    "weixin-redpack": "^1.1.1"
   }
 }
