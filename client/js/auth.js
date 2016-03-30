@@ -26,7 +26,7 @@ define(function(require, exports, module){
             }
 
             this.code = code;
-            // this.getAccessCode()
+            this.getAccessCode()
         },
 
         // 第二步：通过code换取网页授权access_token

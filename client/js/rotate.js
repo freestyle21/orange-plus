@@ -1,5 +1,5 @@
 define(function(require, exports, module){
-
+    var APPID = 'wx7ccadc024b3b0001';
     var peoples = require('./people')
 
     window.requestAnimFrame = (function() {
@@ -9,10 +9,11 @@ define(function(require, exports, module){
             }
     })();
 
+
     function findNumberByName (name) {
         var number = '';
 
-        peoples.forEach(peoples, function(val, key) {
+        peoples.forEach(function(val) {
             if(val.name == name) {
                 number = val.number;
             } 
@@ -42,6 +43,8 @@ define(function(require, exports, module){
             3: 67
         },
 
+        isCorrectName: false,
+
         readyRotate: function() {
             this.bindClick()
         },
@@ -69,10 +72,11 @@ define(function(require, exports, module){
                 //     $('.answer-question').dialog('show')
                 //     return false;
                 // }
-                // if(!ctx.checkIsSelfPeople()) {
-                //     $('.input-name').dialog('show')
-                //     return false;
-                // }
+                if(false) {
+                // if(!ctx.isCorrectName) {
+                    $('.input-name').dialog('show')
+                    return false;
+                }
                 if ( ctx.running ) {
                     return;
                 }
@@ -85,10 +89,12 @@ define(function(require, exports, module){
             $('#input-name').on('click', function() {
                 var name = $('#name').val()
                 var number = $('#number').val()
-
                 if(number == findNumberByName(name)) {
+                    ctx.isCorrectName = true;
+                    $('.page6 #inner').click()
                     return true;
                 } else {
+                    $('#trips').html('工号或者名字错误!')
                     return false;
                 }
             }); 
@@ -121,15 +127,59 @@ define(function(require, exports, module){
             } else {
                 this.running = false;
             }
+
             
-            if( this.now == 660 && this.steps.length == 659 ) {
-                alert( "别灰心，明天再来！" );
+            if( this.now == 663 && this.steps.length == 662 ) {
+                alert( "下次再来" );
             }
-            if( (this.now == 609 && this.steps.length == 609 ) 
-                || (this.now == 645 && this.steps.length == 645) ) {
-                alert('.....')
-                // $( ".mark, .pop-2" ).show();
+            if( this.now == 696 && this.steps.length == 695 ) {
+                alert('1等奖')
             }
+            if(this.now == 678 && this.steps.length == 676) {
+                alert('2等奖')
+            } 
+            if(this.now == 669 && this.steps.length == 669) {
+                alert('3等奖')
+            }
+            // this.now:663
+            // rotate.js:130 this.steps.length:662
+            // this.now:663
+            // rotate.js:130 this.steps.length:662
+            // this.now:663
+            // rotate.js:130 this.steps.length:662
+            // this.now:663
+            // rotate.js:130 this.steps.length:662
+            // wu
+            // ===
+
+            // this.now:696
+            // rotate.js:130 this.steps.length:695
+            // this.now:696
+            // rotate.js:130 this.steps.length:695
+            // 1
+            // ====
+
+            // this.now:678
+            // rotate.js:130 this.steps.length:676
+            // this.now:678
+            // rotate.js:130 this.steps.length:676
+            // this.now:678
+            // rotate.js:130 this.steps.length:676
+            // this.now:678
+            // rotate.js:130 this.steps.length:676
+            // 2
+            // ====
+
+            // this.now:669
+            // rotate.js:130 this.steps.length:669
+            // this.now:669
+            // rotate.js:130 this.steps.length:669
+            // this.now:669
+            // rotate.js:130 this.steps.length:669
+            // this.now:669
+            // rotate.js:130 this.steps.length:669
+            // 3
+            // ====
         },
 
         // 检查答案是否正确
@@ -141,20 +191,14 @@ define(function(require, exports, module){
             console.log($('.q3 input:checked').val())
             console.log($('.q4 input:checked').val())
             console.log($('.q5 input:checked').val())
-            if($('.q1 input:checked').val() == '1'
+            if($('.q1 input:checked').val() == '3'
                 && $('.q2 input:checked').val() == '2'
-                && $('.q3 input:checked').val() == '3'
+                && $('.q3 input:checked').val() == '1'
                 && $('.q4 input:checked').val() == '0'
                 && $('.q5 input:checked').val() == '1') {
                 isCorrect = true;
             }
             return isCorrect;
-        },
-
-        // 检查是否是公司自己人
-        checkIsSelfPeople: function() {
-
-            return false
         }
     };
 });
