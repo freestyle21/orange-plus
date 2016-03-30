@@ -1,5 +1,7 @@
 define(function(require, exports, module){
 
+    var peoples = require('./people')
+
     window.requestAnimFrame = (function() {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
             function(callback) {
@@ -7,6 +9,16 @@ define(function(require, exports, module){
             }
     })();
 
+    function findNumberByName (name) {
+        var number = '';
+
+        peoples.forEach(peoples, function(val, key) {
+            if(val.name == name) {
+                number = val.number;
+            } 
+        })
+        return number
+    }
     // 一等奖 [ 112° ] 5元
     // 二等奖 [ 22, 157, 247 ] 3元
     // 三等奖 [ 67, 292 ] 1元
@@ -40,7 +52,8 @@ define(function(require, exports, module){
             var randomNum = parseInt(10 * Math.random());
 
             var rewardsLevel = this.rewards[randomNum]
-            
+                
+            console.log(rewardsLevel)
             endDeg = this.rewardsMap[rewardsLevel];
 
             this.rewardsLevel = rewardsLevel;
@@ -52,7 +65,14 @@ define(function(require, exports, module){
             var ctx = this;
             // 
             $('.page6').on('click', '#inner', function() {
-
+                // if(!ctx.checkQuestionCorrect()) {
+                //     $('.answer-question').dialog('show')
+                //     return false;
+                // }
+                // if(!ctx.checkIsSelfPeople()) {
+                //     $('.input-name').dialog('show')
+                //     return false;
+                // }
                 if ( ctx.running ) {
                     return;
                 }
@@ -61,6 +81,17 @@ define(function(require, exports, module){
                 ctx.start( endDeg, 0 );
                 // start( prizeDeg[res.list.index - 1], res.list.index );
             });
+
+            $('#input-name').on('click', function() {
+                var name = $('#name').val()
+                var number = $('#number').val()
+
+                if(number == findNumberByName(name)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }); 
         },
         start: function(deg, index) {
             deg = deg || this.lostDeg[parseInt(this.lostDeg.length * Math.random())];
@@ -99,6 +130,31 @@ define(function(require, exports, module){
                 alert('.....')
                 // $( ".mark, .pop-2" ).show();
             }
+        },
+
+        // 检查答案是否正确
+        checkQuestionCorrect: function() {
+            var isCorrect = false;
+
+            console.log($('.q1 input:checked').val())
+            console.log($('.q2 input:checked').val())
+            console.log($('.q3 input:checked').val())
+            console.log($('.q4 input:checked').val())
+            console.log($('.q5 input:checked').val())
+            if($('.q1 input:checked').val() == '1'
+                && $('.q2 input:checked').val() == '2'
+                && $('.q3 input:checked').val() == '3'
+                && $('.q4 input:checked').val() == '0'
+                && $('.q5 input:checked').val() == '1') {
+                isCorrect = true;
+            }
+            return isCorrect;
+        },
+
+        // 检查是否是公司自己人
+        checkIsSelfPeople: function() {
+
+            return false
         }
     };
 });
