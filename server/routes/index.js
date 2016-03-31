@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const url = require('url');
+var request = require('request');
 var querystring = require('querystring');
 var moment = require('moment');
 var md5 = require('md5');
@@ -17,7 +18,7 @@ var Redpack = require('weixin-redpack');
 
 var APPID = 'wx7ccadc024b3b0001';
 var MCHID = '1325672901';
-var SECRET_KEY = 'E6RjCC4xw0ov8RmwQ6MwHQdRFKvBRTf1';
+var SECRET_KEY = '6RjCC4xw0ov8RmwQ6MwHQdRFKvBRTf1E';
 var SHOP_NAME = '统一饮品集趣吧';
 
 function getCommonConfig (url, cookie, data, method) {
@@ -82,7 +83,7 @@ module.exports = function(app) {
         var moneyNum = this.params.moneyNum;
         var openid = this.params.openid;
 
-
+        var PFX = process.cwd() + '/server/cert/apiclient_cert.p12';
         var url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
 
         var postData = {
@@ -101,40 +102,51 @@ module.exports = function(app) {
         };
         var sign = getSign(postData);
         postData.sign = sign;
-        postData.pfx = fs.readFileSync(process.cwd() + '/server/cert/apiclient_cert.p12')
 
-        console.log(postData)
-        console.log('.........');
-        Redpack.sendRedpack(postData, function(err, result){
-          console.log(result);
-          console.log('.........');
+        // console.log(postData)
+        // console.log('.........');
+        // Redpack.sendRedpack(postData, function(err, result){
+        //   console.log(result);
+        //   console.log('.........');
+        // });
+
+        var  postXMLData = "<xml>";
+            postXMLData += "<act_name>"+postData.act_name+"</act_name>";
+            postXMLData += "<client_ip>"+postData.client_ip+"</client_ip>";
+            postXMLData += "<mch_billno>"+postData.mch_billno+"</mch_billno>";
+            postXMLData += "<mch_id>"+postData.mch_id+"</mch_id>";
+            postXMLData += "<nonce_str>"+postData.nonce_str+"</nonce_str>";
+            postXMLData += "<re_openid>"+postData.re_openid+"</re_openid>";
+            postXMLData += "<remark>"+postData.remark+"</remark>";
+            postXMLData += "<send_name>"+postData.send_name+"</send_name>";
+            postXMLData += "<total_amount>"+postData.total_amount+"</total_amount>";
+            postXMLData += "<total_num>"+postData.total_num+"</total_num>";
+            postXMLData += "<wishing>"+postData.wishing+"</wishing>";
+            postXMLData += "<wxappid>"+postData.wxappid+"</wxappid>";
+            postXMLData += "<sign>"+postData.sign+"</sign>";
+            postXMLData += "</xml>";
+
+        request({
+          url: url,
+          method: 'POST',
+          body: postXMLData,
+          agentOptions: {
+                pfx: fs.readFileSync(PFX),
+                passphrase: MCHID
+          }
+        },
+        function(err, response, body){
+            console.log('...........')
+            console.log(body);
         });
-
-        // var postXMLData = '<?xml version="1.0" encoding="utf-8"?>' + 
-        //                     '<Document>'+
-        //                     '<nonce_str>' + postData.nonce_str + '</nonce_str>'+
-        //                     '<mch_billno>' + postData.mch_billno + '</mch_billno>'+
-        //                     '<mch_id>' + postData.mch_id + '</mch_id>'+
-        //                     '<wxappid>' + postData.wxappid + '</wxappid>'+
-        //                     '<send_name>' + postData.send_name + '</send_name>'+
-        //                     '<re_openid>' + postData.re_openid + '</re_openid>'+
-        //                     '<total_amount>' + postData.total_amount + '</total_amount>'+
-        //                     '<total_num>' + postData.total_num + '</total_num>'+
-        //                     '<wishing>' + postData.wishing + '</wishing>'+
-        //                     '<client_ip>' + postData.client_ip + '</client_ip>'+
-        //                     '<act_name>' + postData.act_name + '</act_name>'+
-        //                     '<remark>' + postData.remark + '</remark>'+
-        //                     '<sign>' + postData.sign + '</sign></Document>';
-        
-        // console.log('url:')
-        // console.log(url)
-        // console.log('=======postData==========')
-        // console.log('postXMLData:')
-        // console.log(postXMLData)
 
         // var reponse = yield koaRequest({
         //     body: postXMLData,
         //     method: 'POST',
+        //     agentOptions: {
+        //       pfx: fs.readFileSync(PFX),
+        //       passphrase: MCHID
+        //     },
         //     uri: url,
         //     headers: {
         //         "Content-Type": 'text/xml',
@@ -149,19 +161,21 @@ module.exports = function(app) {
 
     // 获取签名
     function getSign(obj) {
+        // console.log('元素obj:')
+        // console.log(obj)
         var parmsString = querystring.stringify(obj)
         var stringAArr = parmsString.split('&');
         var stringA = stringAArr.sort().join('&');
-        console.log('第一步:' + stringA)
+        // console.log('第一步:' + stringA)
 
         // 以上是按ASCII排序
 
         var stringSignTemp = stringA + '&key=' + SECRET_KEY;
-        console.log('第二步：'+stringSignTemp)
+        // console.log('第二步：'+stringSignTemp)
 
         var sign = md5(stringSignTemp).toUpperCase();
 
-        console.log('第四步：'+sign)
+        // console.log('第四步：'+sign)
         return sign;
     }
     function getClientIp(req) {
@@ -170,7 +184,8 @@ module.exports = function(app) {
              req.socket.remoteAddress ||
              req.connection.socket.remoteAddress;
 
-        return ip.replace('::ffff:', '');
+        return '220.181.57.217';
+        // return ip.replace('::ffff:', '');
     }
 }
 

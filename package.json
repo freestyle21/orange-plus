@@ -36,6 +36,7 @@
     "moment": "^2.12.0",
     "querystring": "^0.2.0",
     "randomstring": "^1.1.4",
+    "request": "^2.69.0",
     "weixin-redpack": "^1.1.1"
   }
 }
