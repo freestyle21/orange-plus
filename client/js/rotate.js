@@ -1,6 +1,7 @@
 define(function(require, exports, module){
     var APPID = 'wx7ccadc024b3b0001';
     var peoples = require('./people')
+    var auth = require('./auth')
 
     window.requestAnimFrame = (function() {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -130,16 +131,30 @@ define(function(require, exports, module){
 
             
             if( this.now == 663 && this.steps.length == 662 ) {
-                alert( "下次再来" );
-            }
+                $("#trips-content").text('真不走运，再来一次吧！')
+                $('.trips').dialog('show')
+            }   
             if( this.now == 696 && this.steps.length == 695 ) {
-                alert('1等奖')
+                auth.sendRedPack(500, sendCallback) // 一等奖发5元
             }
             if(this.now == 678 && this.steps.length == 676) {
-                alert('2等奖')
+                auth.sendRedPack(300, sendCallback) // 2等奖发3元
             } 
             if(this.now == 669 && this.steps.length == 669) {
-                alert('3等奖')
+                auth.sendRedPack(100, sendCallback) // 3等奖发1元
+            }
+
+            function sendCallback(data) {
+                if(data.return_code && data.return_code[0] == 'SUCCESS') {
+                    var msg = data.return_msg[0].replace('该用户今日领取红包个数超过限制,如有需要请登录微信支付商户平台更改API安全配置','您今日已领取红包，明日再来吧~')
+
+                    $("#trips-content").text(msg)
+                    $("#trips-content").append('<div style="margin-top:10px">快右上角分享给同事吧！</div>')
+                    $('.trips').dialog('show')
+                } else {
+                    $("#trips-content").text(data.return_msg[0])
+                    $('.trips').dialog('show')
+                }
             }
             // this.now:663
             // rotate.js:130 this.steps.length:662

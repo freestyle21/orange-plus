@@ -53,23 +53,20 @@ define(function(require, exports, module){
                 success: function(data) {
                     ctx.openid = data.openid;
                     ctx.nickname = data.nickname;
-
-                    ctx.fahongbao()
                 }
             })
         },
 
-        // 测试发布红包。
-        fahongbao: function() {
-            var money = '100'; // 单位是分
+        // 发红包。
+        // @param number 红包数量/单位分
+        // @param callback 回调函数
+        sendRedPack: function(number, callback) {
+            var money = number || '0'; // 单位是分
 
             $.ajax({
                 url: '/getMoney/' + money + '/' + this.openid,
-                success: function(data) {
-                    debugger;
-                },
-                error: function(data) {
-                    debugger;
+                success: function(json) {
+                    callback && callback(json && json.data)
                 }
             })
         },
