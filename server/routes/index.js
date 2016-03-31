@@ -11,6 +11,7 @@ var querystring = require('querystring');
 var moment = require('moment');
 var md5 = require('md5');
 var randomstring = require("randomstring");
+var parseString = require('xml2js').parseString;
 
 var koaRequest = require('koa-request');
 var HttpResponse = require('../common/httpResponse');
@@ -74,6 +75,7 @@ module.exports = function(app) {
     })
 
     app.get('/getMoney/:moneyNum/:openid', function *(next) {
+        var ctx = this;
         var ORDER_ID = '1325672901' + moment().format('YYYYMMDD') + moment().format('MMDDHHmmss');
         var RANDOM_NUM = randomstring.generate({
           length: 16,
@@ -102,14 +104,7 @@ module.exports = function(app) {
         };
         var sign = getSign(postData);
         postData.sign = sign;
-
-        // console.log(postData)
-        // console.log('.........');
-        // Redpack.sendRedpack(postData, function(err, result){
-        //   console.log(result);
-        //   console.log('.........');
-        // });
-
+        
         var  postXMLData = "<xml>";
             postXMLData += "<act_name>"+postData.act_name+"</act_name>";
             postXMLData += "<client_ip>"+postData.client_ip+"</client_ip>";
@@ -126,36 +121,29 @@ module.exports = function(app) {
             postXMLData += "<sign>"+postData.sign+"</sign>";
             postXMLData += "</xml>";
 
-        request({
-          url: url,
-          method: 'POST',
-          body: postXMLData,
-          agentOptions: {
-                pfx: fs.readFileSync(PFX),
-                passphrase: MCHID
-          }
-        },
-        function(err, response, body){
-            console.log('...........')
-            console.log(body);
-        });
-
-        // var reponse = yield koaRequest({
-        //     body: postXMLData,
-        //     method: 'POST',
-        //     agentOptions: {
-        //       pfx: fs.readFileSync(PFX),
-        //       passphrase: MCHID
-        //     },
-        //     uri: url,
-        //     headers: {
-        //         "Content-Type": 'text/xml',
-        //         "Content-Length": Buffer.byteLength(postXMLData || '', 'utf8')
-        //     }
-        // });
-        // console.log('reponse.body:-----------------')
-        // console.log(reponse.body)
-        // HttpResponse(reponse, this);
+        
+        function sendRedPack(callback) {
+            request({
+              url: url,
+              method: 'POST',
+              body: postXMLData,
+              agentOptions: {
+                    pfx: fs.readFileSync(PFX),
+                    passphrase: MCHID
+              }
+            }, function(err, response, body){
+                parseString(body, function(err, result) {
+                    var result = {
+                        code: 200,
+                        data: result.xml,
+                        message: 'success'
+                    }
+                    callback(null, result)
+                })
+                
+            });
+        }
+        this.body = yield sendRedPack;
         yield next;
     })
 

@@ -5,7 +5,8 @@
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "sudo node-dev ./server/bin/www.js"
+    "start": "sudo node-dev ./server/bin/www.js",
+    "production": "pm2 start ./server/bin/www.js --name plus"
   },
   "repository": {
     "type": "git",
@@ -33,10 +34,12 @@
   "devDependencies": {
     "ejs": "^2.4.1",
     "md5": "^2.1.0",
+    "min-parse": "^1.1.2",
     "moment": "^2.12.0",
     "querystring": "^0.2.0",
     "randomstring": "^1.1.4",
     "request": "^2.69.0",
-    "weixin-redpack": "^1.1.1"
+    "weixin-redpack": "^1.1.1",
+    "xml2js": "^0.4.16"
   }
 }
