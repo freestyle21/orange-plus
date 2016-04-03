@@ -20,7 +20,6 @@ define(function(require, exports, module){
 
             var code = this.getQueryString('code');
             
-            return false;
             // 第一步 用户同意授权，获取code
             if(!code) {
                 location.href = WEIXIN_AUTH
