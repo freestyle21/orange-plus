@@ -1,6 +1,6 @@
 define(function(require, exports, module){
     var APPID = 'wx7ccadc024b3b0001';
-    var url = 'http://f2e.xiaojukeji.com';
+    var url = 'http://ty.17gu.com';
     var WEIXIN_AUTH = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri='+ encodeURIComponent(url) +'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 
 
