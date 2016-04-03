@@ -9,6 +9,15 @@
     bottom: 0;
     overflow: hidden;            
 }
+
+.music {
+    position: fixed;
+    right: 24px;
+    top: 24px;
+}
+.music img {
+    width: 30px;
+}
 .page{
     /*font-size: 72px;
     line-height: 320px;

@@ -19,6 +19,8 @@ define(function(require, exports, module){
             // 微信授权
 
             var code = this.getQueryString('code');
+            
+            return false;
             // 第一步 用户同意授权，获取code
             if(!code) {
                 location.href = WEIXIN_AUTH
