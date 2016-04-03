@@ -1,6 +1,6 @@
 define(function(require, exports, module){
     var APPID = 'wx7ccadc024b3b0001';
-    var url = 'http://ty.17gu.com';
+    var url = 'http://taoker.wang';
     var WEIXIN_AUTH = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri='+ encodeURIComponent(url) +'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 
 
@@ -19,7 +19,7 @@ define(function(require, exports, module){
             // 微信授权
 
             var code = this.getQueryString('code');
-            
+
             // 第一步 用户同意授权，获取code
             if(!code) {
                 location.href = WEIXIN_AUTH
