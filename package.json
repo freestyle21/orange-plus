@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "sudo node-dev ./server/bin/www.js",
-    "production": "pm2 start ./server/bin/www.js --name plus"
+    "production": "pm2 stop plus;pm2 start ./server/bin/www.js --name plus"
   },
   "repository": {
     "type": "git",
