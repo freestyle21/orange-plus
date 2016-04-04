@@ -69,14 +69,14 @@ define(function(require, exports, module){
             var ctx = this;
             // 
             $('.page6').on('click', '#inner', function() {
-                // if(!ctx.checkQuestionCorrect()) {
-                //     $('.answer-question').dialog('show')
-                //     return false;
-                // }
-                // if(!ctx.isCorrectName) {
-                //     $('.input-name').dialog('show')
-                //     return false;
-                // }
+                if(!ctx.checkQuestionCorrect()) {
+                    $('.answer-question').dialog('show')
+                    return false;
+                }
+                if(!ctx.isCorrectName) {
+                    $('.input-name').dialog('show')
+                    return false;
+                }
                 if ( ctx.running ) {
                     return;
                 }
