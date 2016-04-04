@@ -277,6 +277,9 @@
     background: url('../img/bg7.png');
     background-size: cover;
 }
+.ui-dialog .ui-dialog-bd {
+    -webkit-box-align: left;
+}
 .page6 .page6-title {
     text-align: center;
     font-size: 24px;

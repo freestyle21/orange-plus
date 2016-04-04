@@ -10,6 +10,7 @@ var request = require('request');
 var querystring = require('querystring');
 var moment = require('moment');
 var md5 = require('md5');
+var utf8 = require('utf8');
 var randomstring = require("randomstring");
 var parseString = require('xml2js').parseString;
 
@@ -93,35 +94,35 @@ module.exports = function(app) {
             mch_billno: ORDER_ID, //商户订单号,
             mch_id: MCHID, // 商户号,
             wxappid: APPID, // 公众账号appid
-            send_name: '集趣吧', // 商户名称
+            send_name: 'tongyi', // 商户名称
             re_openid: openid, // 用户openid  
             total_amount: moneyNum, // 付款金额   
             total_num: '1', // 红包发放总人数
-            wishing: '全新鲜橙多混合果子', //红包祝福语
+            wishing: 'goodluck', //红包祝福语
             client_ip: getClientIp(this.req), // Ip地址  
-            act_name: '橙plus', // 活动名称   
-            remark: '解释权归集趣吧.' // 备注,
+            act_name: 'plus', // 活动名称   
+            remark: 'remark' // 备注,
         };
         var sign = getSign(postData);
         postData.sign = sign;
         
-        var  postXMLData = "<xml>";
-            postXMLData += "<act_name>"+decToHex(postData.act_name)+"</act_name>";
+        var  postXMLData = '<xml>';
+            postXMLData += "<act_name>"+postData.act_name+"</act_name>";
             postXMLData += "<client_ip>"+postData.client_ip+"</client_ip>";
             postXMLData += "<mch_billno>"+postData.mch_billno+"</mch_billno>";
             postXMLData += "<mch_id>"+postData.mch_id+"</mch_id>";
             postXMLData += "<nonce_str>"+postData.nonce_str+"</nonce_str>";
             postXMLData += "<re_openid>"+postData.re_openid+"</re_openid>";
-            postXMLData += "<remark>"+decToHex(postData.remark)+"</remark>";
-            postXMLData += "<send_name>"+decToHex(postData.send_name)+"</send_name>";
+            postXMLData += "<remark>"+postData.remark+"</remark>";
+            postXMLData += "<send_name>"+postData.send_name+"</send_name>";
             postXMLData += "<total_amount>"+postData.total_amount+"</total_amount>";
             postXMLData += "<total_num>"+postData.total_num+"</total_num>";
-            postXMLData += "<wishing>"+decToHex(postData.wishing)+"</wishing>";
+            postXMLData += "<wishing>"+postData.wishing+"</wishing>";
             postXMLData += "<wxappid>"+postData.wxappid+"</wxappid>";
             postXMLData += "<sign>"+postData.sign+"</sign>";
             postXMLData += "</xml>";
 
-        
+        console.log(postXMLData)
         function sendRedPack(callback) {
             request({
               url: url,
@@ -143,6 +144,7 @@ module.exports = function(app) {
                 
             });
         }
+        this.type = 'text/html;charset=utf-8'
         this.body = yield sendRedPack;
         yield next;
     })
@@ -161,6 +163,7 @@ module.exports = function(app) {
         var stringSignTemp = stringA + '&key=' + SECRET_KEY;
         // console.log('第二步：'+stringSignTemp)
 
+        stringSignTemp = (stringSignTemp)
         var sign = md5(stringSignTemp).toUpperCase();
 
         // console.log('第四步：'+sign)
@@ -176,11 +179,9 @@ module.exports = function(app) {
         // return ip.replace('::ffff:', '');
     }
 
-    function decToHex(str) {
-        var res=[];
-        for(var i=0;i < str.length;i++)
-            res[i]=("00"+str.charCodeAt(i).toString(16)).slice(-4);
-        return "\\u"+res.join("\\u");
+    function encode_utf8(s) {
+      return unescape(encodeURIComponent(s));
     }
+
 }
 
