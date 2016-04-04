@@ -106,17 +106,17 @@ module.exports = function(app) {
         postData.sign = sign;
         
         var  postXMLData = "<xml>";
-            postXMLData += "<act_name>"+encodeURIComponent(postData.act_name)+"</act_name>";
+            postXMLData += "<act_name>"+decToHex(postData.act_name)+"</act_name>";
             postXMLData += "<client_ip>"+postData.client_ip+"</client_ip>";
             postXMLData += "<mch_billno>"+postData.mch_billno+"</mch_billno>";
             postXMLData += "<mch_id>"+postData.mch_id+"</mch_id>";
             postXMLData += "<nonce_str>"+postData.nonce_str+"</nonce_str>";
             postXMLData += "<re_openid>"+postData.re_openid+"</re_openid>";
-            postXMLData += "<remark>"+encodeURIComponent(postData.remark)+"</remark>";
-            postXMLData += "<send_name>"+encodeURIComponent(postData.send_name)+"</send_name>";
+            postXMLData += "<remark>"+decToHex(postData.remark)+"</remark>";
+            postXMLData += "<send_name>"+decToHex(postData.send_name)+"</send_name>";
             postXMLData += "<total_amount>"+postData.total_amount+"</total_amount>";
             postXMLData += "<total_num>"+postData.total_num+"</total_num>";
-            postXMLData += "<wishing>"+encodeURIComponent(postData.wishing)+"</wishing>";
+            postXMLData += "<wishing>"+decToHex(postData.wishing)+"</wishing>";
             postXMLData += "<wxappid>"+postData.wxappid+"</wxappid>";
             postXMLData += "<sign>"+postData.sign+"</sign>";
             postXMLData += "</xml>";
@@ -174,6 +174,13 @@ module.exports = function(app) {
 
         return '220.181.57.217';
         // return ip.replace('::ffff:', '');
+    }
+
+    function decToHex(str) {
+        var res=[];
+        for(var i=0;i < str.length;i++)
+            res[i]=("00"+str.charCodeAt(i).toString(16)).slice(-4);
+        return "\\u"+res.join("\\u");
     }
 }
 
