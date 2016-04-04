@@ -57,7 +57,6 @@ define(function(require, exports, module){
 
             var rewardsLevel = this.rewards[randomNum]
                 
-            console.log(rewardsLevel)
             endDeg = this.rewardsMap[rewardsLevel];
 
             this.rewardsLevel = rewardsLevel;
@@ -147,7 +146,7 @@ define(function(require, exports, module){
                 if(data.return_code && data.return_code[0] == 'SUCCESS') {
                     var msg = data.return_msg[0];
                     msg = msg.replace('该用户今日领取红包个数超过限制,如有需要请登录微信支付商户平台更改API安全配置','您今日已领取红包，明日再来吧~')
-
+                    msg = msg.require('帐号余额不足，请到商户平台充值后再重试', '今日红包已发完，请明天再来！')
                     $("#trips-content").text(msg && msg.trim())
                     $("#trips-content").append('<div style="margin-top:10px">快分享给同事小伙伴吧！</div>')
                     $('.trips').dialog('show')

@@ -18,6 +18,8 @@ server.on('listening', onListening);
  */
 
 function onError(error) {
+  console.log(error);
+  console.log('error ......')
   if (error.syscall !== 'listen') {
     throw error;
   }

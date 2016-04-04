@@ -6,8 +6,6 @@ define(function(require, exports, module){
 	// fullpage.
 	$('.wp-inner').fullpage()
 
-   	// auth.
-    auth.startAuth()
     music.startMusic()
 
     rotate.readyRotate()

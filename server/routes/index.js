@@ -4,8 +4,8 @@
 
 'use strict';
 
-const fs = require('fs');
-const url = require('url');
+var fs = require('fs');
+var url = require('url');
 var request = require('request');
 var querystring = require('querystring');
 var moment = require('moment');
@@ -13,14 +13,28 @@ var md5 = require('md5');
 var randomstring = require("randomstring");
 var parseString = require('xml2js').parseString;
 
+var util = require('../common/util');
 var koaRequest = require('koa-request');
 var HttpResponse = require('../common/httpResponse');
 var Redpack = require('weixin-redpack');
+var httpMethod = require('../common/httpMethod');
+var dataCenter = require('../common/dataCenter');
 
 var APPID = 'wx7ccadc024b3b0001';
 var MCHID = '1325672901';
 var SECRET_KEY = '6RjCC4xw0ov8RmwQ6MwHQdRFKvBRTf1E';
 var SHOP_NAME = '统一饮品集趣吧';
+var APPID = 'wx7ccadc024b3b0001';
+var REDIRECT_URI = 'http://f2e.xiaojukeji.com';
+var WEIXIN_AUTH = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri='+ encodeURIComponent(REDIRECT_URI) +'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
+
+
+
+var ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/access_token';
+var APPSECRET = '5e8e8078f29190b657eaa3da42077379';
+var GET_USER_INFO = 'https://api.weixin.qq.com/sns/userinfo';
+
+
 
 function getCommonConfig (url, cookie, data, method) {
     return {
@@ -35,45 +49,68 @@ function getCommonConfig (url, cookie, data, method) {
     };
 }
 
+function* getAccessToken(code, ctx) {
+    var url = ACCESS_TOKEN + '?appid='
+            + APPID + '&secret=' + APPSECRET + '&code=' 
+            + code + '&grant_type=authorization_code';
+
+    var config = getCommonConfig(url);
+
+    var response = yield koaRequest(config);
+
+    var info = JSON.parse(response.body);
+
+    dataCenter.access_token = info.access_token
+    dataCenter.openid = info.openid
+
+    return yield getUserInfo(ctx)
+}
+function* getUserInfo (ctx) {
+    var access_token = dataCenter.access_token
+    var openid = dataCenter.openid
+
+    var url = GET_USER_INFO + '?access_token='+access_token+'&openid='+openid+'lang=zh_CN'
+
+    var config = getCommonConfig(url);
+    
+    var response = yield koaRequest(config);
+
+    var info = JSON.parse(response.body);
+
+    dataCenter.nickname = info.nickname
+    return info
+    // { openid: 'ov5W9wqUDaoK4JSNdeToKz8GIqpo',
+    //   nickname: '瞿宝明',
+    //   sex: 1,
+    //   language: 'zh_CN',
+    //   city: 'Hangzhou',
+    //   province: 'Zhejiang',
+    //   country: 'CN',
+    //   headimgurl: 'http://wx.qlogo.cn/mmopen/JVDECnNjedGkk95eP3SvIFZheUa42eoLNOhrgTV2OrTunlBcicGmKBgovhIZhHGHmb8EADnQvgtEHptobVicQEgCfU8nuK8L5f/0',
+    //   privilege: [] }
+}
 
 module.exports = function(app) {
-    let httpMethod = require('../common/httpMethod');
-
-    let ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/access_token';
-    var APPSECRET = '5e8e8078f29190b657eaa3da42077379';
-    var GET_USER_INFO = 'https://api.weixin.qq.com/sns/userinfo';
-
     app.get('/', function* (next) {
-        yield this.render('../index')
+        var urlData = util.getURLQueryString(this.originalUrl);
+
+        if(urlData.code) {
+            var userInfo = yield getAccessToken(urlData.code, this)
+            if(userInfo.openid) {
+                this.res.setHeader('Set-Cookie', ['user_openid='+userInfo.openid]);
+                this.redirect('/')
+            }
+        } else {
+            if(this.cookies.get('user_openid')) {
+                // 有cookie才进入，没有需要重新去请求用户信息
+                yield this.render('../index')
+            } else {
+                this.redirect(WEIXIN_AUTH);
+            }
+        }
     });
 
-    app.get('/getAccess/:appid/:code', function *(next) {
-    	var appid = this.params.appid;
-    	var code = this.params.code;
-
-    	var url = ACCESS_TOKEN + '?appid='+appid+'&secret='+APPSECRET+'&code='+code+'&grant_type=authorization_code'
-
-        var config = getCommonConfig(url);
         
-        var reponse = yield koaRequest(config);
-
-        HttpResponse(reponse, this);
-        yield next;
-    })
-    app.get('/getUserInfo/:access_token/:appid', function *(next) {
-        var access_token = this.params.access_token;
-        var openid = this.params.openid;
-
-        var url = GET_USER_INFO + '?access_token='+access_token+'&openid='+openid+'lang=zh_CN'
-
-        var config = getCommonConfig(url);
-        
-        var reponse = yield koaRequest(config);
-
-        HttpResponse(reponse, this);
-        yield next;
-    })
-
     app.get('/getMoney/:moneyNum/:openid', function *(next) {
         var ctx = this;
         var ORDER_ID = '1325672901' + moment().format('YYYYMMDD') + moment().format('MMDDHHmmss');
@@ -121,7 +158,6 @@ module.exports = function(app) {
             postXMLData += "<sign>"+postData.sign+"</sign>";
             postXMLData += "</xml>";
 
-        console.log(postXMLData)
         function sendRedPack(callback) {
             request({
               url: url,
@@ -144,7 +180,6 @@ module.exports = function(app) {
             });
         }
         this.body = yield sendRedPack;
-        yield next;
     })
 
     // 获取签名
@@ -173,8 +208,7 @@ module.exports = function(app) {
              req.socket.remoteAddress ||
              req.connection.socket.remoteAddress;
 
-        return '220.181.57.217';
-        // return ip.replace('::ffff:', '');
+        return ip.replace('::ffff:', '');
     }
 }
 
