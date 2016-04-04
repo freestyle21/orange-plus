@@ -93,14 +93,14 @@ module.exports = function(app) {
             mch_billno: ORDER_ID, //商户订单号,
             mch_id: MCHID, // 商户号,
             wxappid: APPID, // 公众账号appid
-            send_name: 'testsend_name', // 商户名称
+            send_name: '统一饮品集趣吧', // 商户名称
             re_openid: openid, // 用户openid  
             total_amount: moneyNum, // 付款金额   
             total_num: '1', // 红包发放总人数
-            wishing: 'testwishing', //红包祝福语
+            wishing: '全新鲜橙多混合果子', //红包祝福语
             client_ip: getClientIp(this.req), // Ip地址  
-            act_name: 'testact_name', // 活动名称   
-            remark: 'testremark' // 备注,
+            act_name: '橙plus拧正确打开方式', // 活动名称   
+            remark: '' // 备注,
         };
         var sign = getSign(postData);
         postData.sign = sign;

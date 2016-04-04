@@ -69,12 +69,11 @@ define(function(require, exports, module){
             var ctx = this;
             // 
             $('.page6').on('click', '#inner', function() {
-                // if(!ctx.checkQuestionCorrect()) {
-                //     $('.answer-question').dialog('show')
-                //     return false;
-                // }
-                if(false) {
-                // if(!ctx.isCorrectName) {
+                if(!ctx.checkQuestionCorrect()) {
+                    $('.answer-question').dialog('show')
+                    return false;
+                }
+                if(!ctx.isCorrectName) {
                     $('.input-name').dialog('show')
                     return false;
                 }
@@ -149,7 +148,7 @@ define(function(require, exports, module){
                     var msg = data.return_msg[0].replace('该用户今日领取红包个数超过限制,如有需要请登录微信支付商户平台更改API安全配置','您今日已领取红包，明日再来吧~')
 
                     $("#trips-content").text(msg)
-                    $("#trips-content").append('<div style="margin-top:10px">快右上角分享给同事吧！</div>')
+                    $("#trips-content").append('<div style="margin-top:10px">快分享给同事小伙伴吧！</div>')
                     $('.trips').dialog('show')
                 } else {
                     $("#trips-content").text(data.return_msg[0])
