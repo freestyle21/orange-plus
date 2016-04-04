@@ -10,7 +10,6 @@ var request = require('request');
 var querystring = require('querystring');
 var moment = require('moment');
 var md5 = require('md5');
-var utf8 = require('utf8');
 var randomstring = require("randomstring");
 var parseString = require('xml2js').parseString;
 
@@ -144,7 +143,6 @@ module.exports = function(app) {
                 
             });
         }
-        this.type = 'text/html;charset=utf-8'
         this.body = yield sendRedPack;
         yield next;
     })
@@ -178,10 +176,5 @@ module.exports = function(app) {
         return '220.181.57.217';
         // return ip.replace('::ffff:', '');
     }
-
-    function encode_utf8(s) {
-      return unescape(encodeURIComponent(s));
-    }
-
 }
 
