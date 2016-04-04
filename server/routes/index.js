@@ -93,30 +93,30 @@ module.exports = function(app) {
             mch_billno: ORDER_ID, //商户订单号,
             mch_id: MCHID, // 商户号,
             wxappid: APPID, // 公众账号appid
-            send_name: '<![CDATA[统一饮品集趣吧]]', // 商户名称
+            send_name: '统一饮品集趣吧', // 商户名称
             re_openid: openid, // 用户openid  
             total_amount: moneyNum, // 付款金额   
             total_num: '1', // 红包发放总人数
-            wishing: '<![CDATA[全新鲜橙多混合果子]]', //红包祝福语
+            wishing: '全新鲜橙多混合果子', //红包祝福语
             client_ip: getClientIp(this.req), // Ip地址  
-            act_name: '<![CDATA[橙plus拧正确打开方式]]', // 活动名称   
-            remark: '<![CDATA[解释权归集趣吧.]]>' // 备注,
+            act_name: '橙plus拧正确打开方式', // 活动名称   
+            remark: '解释权归集趣吧.' // 备注,
         };
         var sign = getSign(postData);
         postData.sign = sign;
         
         var  postXMLData = "<xml>";
-            postXMLData += "<act_name>"+postData.act_name+"</act_name>";
+            postXMLData += "<act_name>"+encodeURIComponent(postData.act_name)+"</act_name>";
             postXMLData += "<client_ip>"+postData.client_ip+"</client_ip>";
             postXMLData += "<mch_billno>"+postData.mch_billno+"</mch_billno>";
             postXMLData += "<mch_id>"+postData.mch_id+"</mch_id>";
             postXMLData += "<nonce_str>"+postData.nonce_str+"</nonce_str>";
             postXMLData += "<re_openid>"+postData.re_openid+"</re_openid>";
-            postXMLData += "<remark>"+postData.remark+"</remark>";
-            postXMLData += "<send_name>"+postData.send_name+"</send_name>";
+            postXMLData += "<remark>"+encodeURIComponent(postData.remark)+"</remark>";
+            postXMLData += "<send_name>"+encodeURIComponent(postData.send_name)+"</send_name>";
             postXMLData += "<total_amount>"+postData.total_amount+"</total_amount>";
             postXMLData += "<total_num>"+postData.total_num+"</total_num>";
-            postXMLData += "<wishing>"+postData.wishing+"</wishing>";
+            postXMLData += "<wishing>"+encodeURIComponent(postData.wishing)+"</wishing>";
             postXMLData += "<wxappid>"+postData.wxappid+"</wxappid>";
             postXMLData += "<sign>"+postData.sign+"</sign>";
             postXMLData += "</xml>";
