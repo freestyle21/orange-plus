@@ -85,12 +85,19 @@ define(function(require, exports, module){
                 // start( prizeDeg[res.list.index - 1], res.list.index );
             });
 
-            $('#input-name').on('click', function() {
+            $('body').on('click', '#input-name', function() {
+		console.log('...........')
                 var name = $('#name').val()
                 var number = $('#number').val()
+		
+		alert(name)
+		alert(number)
+		alert(findNumberByName(name))
                 if(number == findNumberByName(name)) {
                     ctx.isCorrectName = true;
+		    $('.input-name').dialog('hide');
                     $('.page6 #inner').click()
+			
                     return true;
                 } else {
                     $('#trips').html('工号或者名字错误!')
