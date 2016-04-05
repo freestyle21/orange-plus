@@ -25,7 +25,7 @@ var MCHID = '1325672901';
 var SECRET_KEY = '6RjCC4xw0ov8RmwQ6MwHQdRFKvBRTf1E';
 var SHOP_NAME = '统一饮品集趣吧';
 var APPID = 'wx7ccadc024b3b0001';
-var REDIRECT_URI = 'http://f2e.xiaojukeji.com';
+var REDIRECT_URI = 'http://ty.ksyide.com';
 var WEIXIN_AUTH = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri='+ encodeURIComponent(REDIRECT_URI) +'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 
 
