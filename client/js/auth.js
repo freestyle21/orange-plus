@@ -65,7 +65,7 @@ define(function(require, exports, module){
             var money = number || '0'; // 单位是分
 
             $.ajax({
-                url: '/getMoney/' + money + '/' + this.openid,
+                url: '/getMoney/' + money,
                 success: function(json) {
                     callback && callback(json && json.data)
                 }

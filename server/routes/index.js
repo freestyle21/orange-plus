@@ -103,6 +103,7 @@ module.exports = function(app) {
         } else {
             if(this.cookies.get('user_openid')) {
                 // 有cookie才进入，没有需要重新去请求用户信息
+                this.cookies.set('user_openid', '')
                 yield this.render('../index')
             } else {
                 this.redirect(WEIXIN_AUTH);
@@ -111,7 +112,7 @@ module.exports = function(app) {
     });
 
         
-    app.get('/getMoney/:moneyNum/:openid', function *(next) {
+    app.get('/getMoney/:moneyNum', function *(next) {
         var ctx = this;
         var ORDER_ID = '1325672901' + moment().format('YYYYMMDD') + moment().format('MMDDHHmmss');
         var RANDOM_NUM = randomstring.generate({
@@ -120,7 +121,7 @@ module.exports = function(app) {
         });
 
         var moneyNum = this.params.moneyNum;
-        var openid = this.params.openid;
+        var openid = dataCenter.openid;
 
         var PFX = process.cwd() + '/server/cert/apiclient_cert.p12';
         var url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
