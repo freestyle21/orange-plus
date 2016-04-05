@@ -86,13 +86,9 @@ define(function(require, exports, module){
             });
 
             $('body').on('click', '#input-name', function() {
-		console.log('...........')
                 var name = $('#name').val()
                 var number = $('#number').val()
 		
-		alert(name)
-		alert(number)
-		alert(findNumberByName(name))
                 if(number == findNumberByName(name)) {
                     ctx.isCorrectName = true;
 		    $('.input-name').dialog('hide');
