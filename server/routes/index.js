@@ -98,14 +98,17 @@ module.exports = function(app) {
             var userInfo = yield getAccessToken(urlData.code, this)
             if(userInfo.openid) {
                 this.res.setHeader('Set-Cookie', ['user_openid='+userInfo.openid]);
+	console.log('redirect to /')
                 this.redirect('/')
             }
         } else {
             if(this.cookies.get('user_openid')) {
                 // 有cookie才进入，没有需要重新去请求用户信息
+		console.log('render index')
                 this.cookies.set('user_openid', '')
                 yield this.render('../index')
             } else {
+		console.log('redirect')
                 this.redirect(WEIXIN_AUTH);
             }
         }

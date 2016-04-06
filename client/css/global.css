@@ -25,10 +25,7 @@
 }
 .page1{
     /*background: red;*/
-    min-height: 667px;
-	overflow: hidden;
     position: relative;
-	margin-top: 0;
     background: url('../img/bg1.png');
     background-size: contain;
 }
