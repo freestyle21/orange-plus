@@ -1,7 +1,7 @@
 /**
  * 服务器入口文件
  *
- * @author qubaoming@didichuxing.com
+ * @author qubaoming@gmail.com
  * @date 2015/02/29
  */
 

@@ -2,7 +2,7 @@
  * Nsky Bus
  *
  * @date 2015/02/29
- * @author qubaoming@didichuxing.com
+ * @author qubaoming@gmail.com
 */
 
 'use strict';
