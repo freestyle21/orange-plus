@@ -22,16 +22,15 @@ var dataCenter = require('../common/dataCenter');
 
 var APPID = 'wx7ccadc024b3b0001';
 var MCHID = '1325672901';
-var SECRET_KEY = '6RjCC4xw0ov8RmwQ6MwHQdRFKvBRTf1E';
+var SECRET_KEY = '(dama)';
 var SHOP_NAME = '统一饮品集趣吧';
 var APPID = 'wx7ccadc024b3b0001';
 var REDIRECT_URI = 'http://ty.ksyide.com';
 var WEIXIN_AUTH = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri='+ encodeURIComponent(REDIRECT_URI) +'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 
 
-
 var ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/access_token';
-var APPSECRET = '5e8e8078f29190b657eaa3da42077379';
+var APPSECRET = '(dama)';
 var GET_USER_INFO = 'https://api.weixin.qq.com/sns/userinfo';
 
 
@@ -98,17 +97,14 @@ module.exports = function(app) {
             var userInfo = yield getAccessToken(urlData.code, this)
             if(userInfo.openid) {
                 this.res.setHeader('Set-Cookie', ['user_openid='+userInfo.openid]);
-	console.log('redirect to /')
                 this.redirect('/')
             }
         } else {
             if(this.cookies.get('user_openid')) {
                 // 有cookie才进入，没有需要重新去请求用户信息
-		console.log('render index')
                 this.cookies.set('user_openid', '')
                 yield this.render('../index')
             } else {
-		console.log('redirect')
                 this.redirect(WEIXIN_AUTH);
             }
         }
